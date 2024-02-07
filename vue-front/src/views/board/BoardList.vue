@@ -89,7 +89,13 @@ export default {
                 params: this.requestBody,
                 headers: {} 
             }).then((response) => {
-                this.list = response.data
+                // this.list = response.data
+                
+                if (response.data.result_code === "OK") {
+                    this.list = response.data.data
+                    this.paging = response.data.pagination
+                    this.no = this.paging.total_list_cnt - ((this.paging.page - 1) * this.paging.page_size)
+                }
             }).catch((err) => {
                 if (err.message.indexOf('Network Error') > -1) {
                     alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
