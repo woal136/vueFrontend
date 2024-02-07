@@ -13,11 +13,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(row, idx) in list" :key="idx">
-                <th>{{ row.idx }}</th>
+            <tr v-for="(row, id) in list" :key="id">
+                <th>{{ row.id }}</th>
                 <th>{{ row.writer }}</th>
-                <th><a @click="fnView(`${row.idx}`)">{{ row.title }}</a></th>
-                <th>{{ row.writeDate }}</th>
+                <th><a @click="fnView(`${row.id}`)">{{ row.title }}</a></th>
+                <th>{{ row.write_date }}</th>
             </tr>
         </tbody>
     </table>
@@ -79,26 +79,22 @@ export default {
     },
     methods: {
         fnGetList() {
-            this.list = [
-                {
-                    "idx": 1,
-                    "title": "제목1",
-                    "writer": "작성자1",
-                    "created_at": "작성일시1"
-                },
-                {
-                    "idx": 1,
-                    "title": "제목1",
-                    "writer": "작성자1",
-                    "created_at": "작성일시1"
-                },
-                {
-                    "idx": 1,
-                    "title": "제목1",
-                    "writer": "작성자1",
-                    "created_at": "작성일시1"
+            this.requestBody = {
+                keyword: this.keyword,
+                page: this.page,
+                size: this.size
+            }
+
+            this.$axios.get(this.$serverUrl + "/board/list", {
+                params: this.requestBody,
+                headers: {} 
+            }).then((response) => {
+                this.list = response.data
+            }).catch((err) => {
+                if (err.message.indexOf('Network Error') > -1) {
+                    alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
                 }
-            ]
+            })
         }
     }
 }
