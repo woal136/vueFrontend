@@ -1,21 +1,21 @@
 <template>
-  <div class="board-detail">
-        <div class="common-buttons">
-          <button type="button" class="w3-button w3-round w3-blue-gray" @click="fnUpdate">수정</button>&nbsp;
-          <button type="button" class="w3-button w3-round w3-red" @click="fnDelete">삭제</button>&nbsp;
-          <button type="button" class="w3-button w3-round w3-gray" @click="fnList">목록</button>
-        </div>
+    <div class="board-detail">
         <div class="board-contents">
-          <h3>{{ title }}</h3>
-          <div>
+            <h3>{{ title }}</h3>
+            <div>
             <strong class="w3-large">{{ writer }}</strong>
             <br>
             <span>{{ write_date }}</span>
             <br>
             <span>{{ contents }}</span>
-          </div>
+            </div>
         </div>
-      </div>
+        <div class="common-buttons">
+            <button type="button" class="w3-button w3-round w3-blue-gray" @click="fnUpdate">수정</button>&nbsp;
+            <button type="button" class="w3-button w3-round w3-red" @click="fnDelete">삭제</button>&nbsp;
+            <button type="button" class="w3-button w3-round w3-gray" @click="fnList">목록</button>
+        </div>
+    </div>
 </template>
 
 <script>
