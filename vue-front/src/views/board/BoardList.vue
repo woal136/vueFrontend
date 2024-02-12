@@ -31,13 +31,25 @@
                 <strong class="w3-button w3-border w3-green" :key="index">{{ n }}</strong>
             </template>
             <template v-else>
-                <a class="w3-button w3-border" href="javascript:;" @click="fnPage(`${n}`)" :key="index">{{ n }}</a>
+                <a class="w3-button w3-border" href="javascript:;" @click="[fnPage(`${n}`), log()]" :key="index">{{ n }}</a>
             </template>
         </template>
         <a href="javascript:;" v-if="paging.total_page_cnt > paging.end_page"
             @click="fnPage(`${paging.end_page + 1}`)" class="next w3-button w3-border">&gt;</a>
-        <a href="javascript:;" @click="fnPage(`${paging.total_page_cnt}`)" class="last w3-button w3-border">&gt;&gt;</a>
+        <a href="javascript:;" @click="[fnPage(`${paging.total_page_cnt}`), log()]" class="last w3-button w3-border">&gt;&gt;</a>
         </span>
+    </div>
+    <div>
+        <select v-model="search_key">
+            <option value="">선택</option>
+            <option value="title">제목</option>
+            <option value="writer">작성자</option>
+            <option value="contents">내용</option>
+        </select>
+        &nbsp;
+        <input type="text" v-model="search_value" @keypress.enter="fnPage()">
+        &nbsp;
+        <button @click="[fnPage(), log()]">검색</button>
     </div>
   </div>
 </template>
@@ -64,7 +76,9 @@ export default {
             }, //페이징 데이터
             page: this.$route.query.page ? this.$route.query.page : 1,
             size: this.$route.query.size ? this.$route.query.size : 10,
-            keyword: this.$route.query.keyword,
+            // keyword: this.$route.query.keyword,
+            search_key: this.$route.query.search_key ? this.$route.query.search_key : '',
+            search_value: this.$route.query.search_value ? this.$route.query.search_value : '',
             paginavigation: function () { //페이징 처리 for문 커스텀
                 let pageNumber = [] //;
                 let start_page = this.paging.start_page;
@@ -75,14 +89,16 @@ export default {
         }
     },
     mounted() {
-        this.fnGetList();
+        this.fnGetList()
     },
     methods: {
         fnGetList() {
             this.requestBody = {
-                keyword: this.keyword,
+                // keyword: this.keyword,
                 page: this.page,
-                size: this.size
+                size: this.size,
+                search_key: this.search_key,
+                search_value: this.search_value
             }
 
             this.$axios.get(this.$serverUrl + "/board/list", {
@@ -103,7 +119,7 @@ export default {
             })
         },
         fnView(id) {
-            this.requestBody.id = id;
+            this.requestBody.id = id
             this.$router.push({
                 path: './detail',
                 query: this.requestBody
@@ -117,8 +133,11 @@ export default {
         fnPage(n) {
             if(this.page !== n) {
                 this.page = n
-                this.fnGetList()
             }
+            this.fnGetList()
+        },
+        log() {
+            console.log(this.requestBody);
         }
     }
 }
